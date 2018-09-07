@@ -6,32 +6,41 @@ import subprocess as sp
 
 cmd_prefix = '>>>'
 comment_char = '#'
+return_code_prefix = '$?='
 
 class Tester():
 
     def __init__(self, file):
         self.commands = []
         self.outputs = []
+        self.return_codes = []
         self.parse_file(file)
 
     def add_command(self, cmd):
         self.commands.append(cmd)
         self.outputs.append([])
+        self.return_codes.append(0)
 
     def add_output(self, line):
         n = len(self.commands) - 1
         self.outputs[n].append(line)
 
+    def add_return_code(self, retc):
+        n = len(self.commands) - 1
+        self.return_codes[n] = retc
+
     def parse_file(self, file):
         with open(args.file) as file:
             for line in file:
                 line = line.strip()
-                if line.startswith(comment_char):
+                if line.startswith(comment_char) or len(line) is 0:
                     continue
-                if line.startswith(cmd_prefix):
+                elif line.startswith(cmd_prefix):
                     cmd = line.strip(cmd_prefix).strip()
-                    self.add_command(cmd.split(' '))
-                    continue
+                    self.add_command(cmd)
+                elif line.startswith(return_code_prefix):
+                    retc = int(line.strip(return_code_prefix).strip())
+                    self.add_return_code(retc)
                 else:
                     self.add_output(line)
 
@@ -40,13 +49,24 @@ class Tester():
         tests_passed = 0
         for i,cmd in enumerate(self.commands):
             expected = self.outputs[i]
-            res = sp.check_output(cmd).decode('utf-8').strip()
+            expected = expected if len(expected) > 0 else ['']
+            exp_retc = self.return_codes[i]
+            p = sp.Popen(cmd, shell=True, stdout=sp.PIPE)
+            out, err = p.communicate()
+            res = out.decode('utf-8').strip()
             res_lines = [l.strip() for l in res.split('\n')]
-            if res_lines == expected:
+            retc = p.returncode
+            if res_lines == expected and retc == exp_retc:
                 tests_passed += 1
+            elif retc != exp_retc:
+                print('Error while running:')
+                print('\t', cmd)
+                print('Expected return code:', exp_retc)
+                print('Got:', retc)
+
             else:
                 print('Error while running:')
-                print('\t', ' '.join(cmd))
+                print('\t', cmd)
                 print('Expected:')
                 print('\t', '\n'.join(expected))
                 print('Got:')
@@ -54,6 +74,18 @@ class Tester():
 
 
         return(tests_passed)
+
+    def __str__(self):
+        s = []
+        for i, cmd in enumerate(self.commands):
+            out = self.outputs[i]
+            ret = self.return_codes[i]
+            s.append(cmd)
+            s.append('\n'.join(out))
+            s.append('$?={}'.format(ret))
+
+        return '\n'.join(s)
+
 
 
 if __name__ == '__main__':

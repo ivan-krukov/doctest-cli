@@ -5,3 +5,6 @@ Darwin
 17.7.0
 >>> echo hello
 bye
+>>> false
+$?=1
+>>>true
