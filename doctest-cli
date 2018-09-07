@@ -78,8 +78,8 @@ class Tester():
                 passed += 1
                 if verbose:
                     print('Test passed:\n ', cmd)
-                    print('With STDERR:\n', '\n'.join(err))
-                    print('With STDOUT:\n', '\n'.join(out))
+                    print('With STDERR:\n', '\n '.join(err))
+                    print('With STDOUT:\n', '\n '.join(out))
                     print('With RETURN:\n', ret)
                     print('-'*sep_length)
             else:
@@ -87,15 +87,15 @@ class Tester():
                 print('Error while running:\n ', cmd)
 
                 if ret != exp_ret:
-                    print('With STDERR:\n ', '\n'.join(err))
+                    print('With STDERR:\n ', '\n '.join(err))
                     print('Expected RETURN:', exp_ret)
                     print('Got:', ret)
                 elif err != exp_err:
-                    print('Expected STDERR:\n ', '\n'.join(exp_stderr))
+                    print('Expected STDERR:\n ', '\n '.join(exp_stderr))
                     print('Got:\n ', '\n'.join(err))
                 else:
-                    print('With STDERR:\n ', '\n'.join(err))
-                    print('Expected STDOUT:\n ', '\n'.join(exp_out))
+                    print('With STDERR:\n ', '\n '.join(err))
+                    print('Expected STDOUT:\n ', '\n '.join(exp_out))
                     print('Got:\n ', '\n'.join(out))
                 if stop_on_fail:
                     return (passed, failed)
