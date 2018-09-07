@@ -1,0 +1,4 @@
+.pytest_cache/
+build/
+dist/
+doctest_cli.egg-info/
