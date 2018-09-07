@@ -1,7 +1,7 @@
 # Test the test
->>> bin/doctest-cli --verbose test/example.sh
+>>> bin/doctest-cli --verbose test/example.test.sh
 
-doctest-cli: test/example.sh
+doctest-cli: test/example.test.sh
 ------------------------------------------------------------
 Test passed:
   echo hello
