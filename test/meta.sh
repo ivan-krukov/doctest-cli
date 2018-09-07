@@ -1,4 +1,4 @@
-# Test for the example tests
+# Test the test
 >>> ./doctest-cli test/example.sh
 
 doctest-cli: testing test/example.sh
