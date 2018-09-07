@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ivan-krukov/doctest-cli.svg?branch=master)](https://travis-ci.org/ivan-krukov/doctest-cli)
+
 # doctest-cli
 
 Doctests for your shell.
