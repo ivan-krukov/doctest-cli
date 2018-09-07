@@ -69,35 +69,35 @@ class Tester():
             elif ret != exp_ret:
                 failed += 1
                 print('Error while running:')
-                print('  ', cmd)
+                print(' ', cmd)
                 print('With STDERR:')
-                print('  ', '\n'.join(err))
+                print(' ', '\n'.join(err))
                 print('Expected return code:', exp_ret)
                 print('Got:', ret)
             elif err != exp_err:
                 failed += 1
                 print('Error while running:')
-                print('  ', cmd)
+                print(' ', cmd)
                 print('Expected STDERR:')
-                print('  ', '\n'.join(exp_err))
+                print(' ', '\n'.join(exp_err))
                 print('Got:')
-                print('  ', '\n'.join(err))
+                print(' ', '\n'.join(err))
             else:
                 failed += 1
                 print('Error while running:')
-                print('  ', cmd)
+                print(' ', cmd)
                 print('With STDERR:')
-                print('  ', '\n'.join(err))
+                print(' ', '\n'.join(err))
                 print('Expected STDOUT:')
-                print('  ', '\n'.join(exp_out))
+                print(' ', '\n'.join(exp_out))
                 print('Got:')
-                print('  ', '\n'.join(out))
+                print(' ', '\n'.join(out))
 
         return (passed, failed)
 
 if __name__ == '__main__':
     parser = ArgumentParser('doctest-cli')
-    parser.add_argument('-f', '--file', help='input file')
+    parser.add_argument('file', help='input file')
     args = parser.parse_args()
 
     t = Tester(args.file)
