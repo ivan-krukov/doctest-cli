@@ -3,15 +3,18 @@
 from __future__ import print_function
 from argparse import ArgumentParser
 import subprocess as sp
+import sys
 
 cmd_prefix = '>>>'
 comment_prefix = '#'
 stderr_prefix = '!'
 returncode_prefix = '$?='
+sep_length = 60
 
 class Tester():
 
     def __init__(self, file):
+        self.file = file
         self.cmd = []
         self.stdout = []
         self.stderr = []
@@ -50,9 +53,11 @@ class Tester():
                 else:
                     self.add_stdout(line)
 
-    def test(self):
+    def test(self, verbose=False, stop_on_fail=False):
         passed = 0
         failed = 0
+        print('doctest-cli: testing {}'.format(self.file))
+        print('-'*sep_length)
         for i,cmd in enumerate(self.cmd):
             exp_out = self.stdout[i] if len(self.stdout[i]) > 0 else ['']
             exp_err = self.stderr[i] if len(self.stderr[i]) > 0 else ['']
@@ -66,40 +71,43 @@ class Tester():
 
             if out == exp_out and ret == exp_ret and err == exp_err:
                 passed += 1
-            elif ret != exp_ret:
-                failed += 1
-                print('Error while running:')
-                print(' ', cmd)
-                print('With STDERR:')
-                print(' ', '\n'.join(err))
-                print('Expected return code:', exp_ret)
-                print('Got:', ret)
-            elif err != exp_err:
-                failed += 1
-                print('Error while running:')
-                print(' ', cmd)
-                print('Expected STDERR:')
-                print(' ', '\n'.join(exp_err))
-                print('Got:')
-                print(' ', '\n'.join(err))
+                if verbose:
+                    print('Test passed:\n ', cmd)
+                    print('With STDERR:\n', '\n'.join(err))
+                    print('With STDOUT:\n', '\n'.join(out))
+                    print('With RETURN:\n', ret)
+                    print('-'*sep_length)
             else:
                 failed += 1
-                print('Error while running:')
-                print(' ', cmd)
-                print('With STDERR:')
-                print(' ', '\n'.join(err))
-                print('Expected STDOUT:')
-                print(' ', '\n'.join(exp_out))
-                print('Got:')
-                print(' ', '\n'.join(out))
+                print('Error while running:\n ', cmd)
+
+                if ret != exp_ret:
+                    print('With STDERR:\n ', '\n'.join(err))
+                    print('Expected RETURN:', exp_ret)
+                    print('Got:', ret)
+                elif err != exp_err:
+                    print('Expected STDERR:\n ', '\n'.join(exp_stderr))
+                    print('Got:\n ', '\n'.join(err))
+                else:
+                    print('With STDERR:\n ', '\n'.join(err))
+                    print('Expected STDOUT:\n ', '\n'.join(exp_out))
+                    print('Got:\n ', '\n'.join(out))
+                if stop_on_fail:
+                    return (passed, failed)
+                print('-'*sep_length)
 
         return (passed, failed)
 
 if __name__ == '__main__':
     parser = ArgumentParser('doctest-cli')
     parser.add_argument('file', help='input file')
+    parser.add_argument('-s', '--stop-on-fail', action = 'store_true', help='Stop after first failed test')
+    parser.add_argument('-v', '--verbose', action = 'store_true', help='Show all tests')
     args = parser.parse_args()
 
     t = Tester(args.file)
-    passed, failed = t.test()
-    print('\nTests passed: {}\nTests failed: {}'.format(passed, failed))
+    passed, failed = t.test(args.verbose, args.stop_on_fail)
+    if failed is 0:
+        print('All {} tests passed'.format(passed))
+    else:
+        print('Tests ran: {}\nTests passed: {}\nTests failed: {}'.format(passed+failed, passed, failed))
