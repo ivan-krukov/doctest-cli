@@ -4,3 +4,4 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+script: python ./doctest-cli test/meta.sh
