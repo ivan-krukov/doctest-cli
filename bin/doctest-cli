@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-from argparse import ArgumentParser
 import subprocess as sp
 import sys
 
@@ -69,7 +68,7 @@ class Tester():
     def test(self, verbose=False, stop_on_fail=False):
         passed = 0
         failed = 0
-        print('doctest-cli: testing {}'.format(self.file))
+        print('doctest-cli: {}'.format(self.file))
         print('-'*sep_length)
         for i,cmd in enumerate(self.cmd):
             exp_out = self.stdout[i]
@@ -108,6 +107,8 @@ class Tester():
         return (passed, failed)
 
 if __name__ == '__main__':
+    from argparse import ArgumentParser
+
     parser = ArgumentParser('doctest-cli')
     parser.add_argument('file', help='input file')
     parser.add_argument('-s', '--stop-on-fail', action = 'store_true', help='Stop after first failed test')

@@ -4,7 +4,7 @@
 >>> echo hello
 hello
 
-# Test fail
+# Test fail - this fails
 >>> echo hello
 bye
 
@@ -28,7 +28,7 @@ world
 >>> echo 'hello' > tmp.txt && wc -l tmp.txt && rm tmp.txt
 1 tmp.txt
 
-# Test fail unknown
+# Test fail unknown - this fails
 >>> take 3
 3
 

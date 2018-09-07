@@ -1,7 +1,7 @@
 # Test the test
 >>> ./doctest-cli test/example.sh
 
-doctest-cli: testing test/example.sh
+doctest-cli: test/example.sh
 ------------------------------------------------------------
 Error while running:
   echo hello
