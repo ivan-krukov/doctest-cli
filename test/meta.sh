@@ -1,5 +1,5 @@
 # Test the test
->>> ./doctest-cli test/example.sh
+>>> bin/doctest-cli test/example.sh
 
 doctest-cli: test/example.sh
 ------------------------------------------------------------

@@ -68,7 +68,7 @@ this is fish
 Whitespace (including intervening newlines) is ignored. For example, the following test should pass:
 
 ```sh
->>>echo 'hello\n\n\n\n\n\nworld'
+>>>printf 'hello\n\n\n\n\n\nworld'
 hello
 world
 ```

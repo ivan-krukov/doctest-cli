@@ -16,7 +16,7 @@ $?=1
 >>> true
 
 # Test multiline
->>> echo "hello\nworld"
+>>> printf "hello\nworld"
 hello
 world
 
