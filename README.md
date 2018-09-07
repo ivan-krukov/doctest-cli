@@ -50,6 +50,16 @@ Check `stderr` output:
 ! error
 ```
 
+Custom shell:
+
+```fish
+#!/usr/local/bin/fish
+>>> echo hello; and echo this is fish
+hello
+this is fish
+```
+
+
 ## Details
 
 `doctest-cli` uses `python`'s `Subprocess` module to spawn a shell for each command and checks it against the provided output. 

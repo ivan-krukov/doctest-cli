@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import subprocess as sp
 import sys
 
+shebang_prefix = '#!'
 cmd_prefix = '>>>'
 comment_prefix = '#'
 stderr_prefix = '!'
@@ -15,6 +16,7 @@ class Tester():
 
     def __init__(self, file):
         self.file = file
+        self.executable = '/bin/sh'
         self.cmd = []
         self.stdout = []
         self.stderr = []
@@ -40,7 +42,10 @@ class Tester():
         with open(args.file) as file:
             for line in file:
                 line = line.strip()
-                if line.startswith(comment_prefix) or len(line) is 0:
+
+                if line.startswith(shebang_prefix):
+                    self.executable = line.strip(shebang_prefix).strip()
+                elif line.startswith(comment_prefix) or len(line) is 0:
                     continue
                 elif line.startswith(cmd_prefix):
                     cmd = line.strip(cmd_prefix).strip()
@@ -63,7 +68,7 @@ class Tester():
             exp_err = self.stderr[i] if len(self.stderr[i]) > 0 else ['']
             exp_ret = self.returncode[i]
 
-            p = sp.Popen(cmd, shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
+            p = sp.Popen(cmd, shell=True, executable=self.executable, stdout=sp.PIPE, stderr=sp.PIPE)
             out, err = p.communicate()
             out = out.decode('utf-8').strip().split('\n')
             err = err.decode('utf-8').strip().split('\n')
