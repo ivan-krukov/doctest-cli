@@ -1,0 +1,7 @@
+# This is a comment
+>>> uname
+Darwin
+>>> uname -r
+17.7.0
+>>> echo hello
+bye

@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from argparse import ArgumentParser
+import subprocess as sp
+
+cmd_prefix = '>>>'
+comment_char = '#'
+
+class Tester():
+
+    def __init__(self, file):
+        self.commands = []
+        self.outputs = []
+        self.parse_file(file)
+
+    def add_command(self, cmd):
+        self.commands.append(cmd)
+        self.outputs.append([])
+
+    def add_output(self, line):
+        n = len(self.commands) - 1
+        self.outputs[n].append(line)
+
+    def parse_file(self, file):
+        with open(args.file) as file:
+            for line in file:
+                line = line.strip()
+                if line.startswith(comment_char):
+                    continue
+                if line.startswith(cmd_prefix):
+                    cmd = line.strip(cmd_prefix).strip()
+                    self.add_command(cmd.split(' '))
+                    continue
+                else:
+                    self.add_output(line)
+
+
+    def test(self):
+        tests_passed = 0
+        for i,cmd in enumerate(self.commands):
+            expected = self.outputs[i]
+            res = sp.check_output(cmd).decode('utf-8').strip()
+            res_lines = [l.strip() for l in res.split('\n')]
+            if res_lines == expected:
+                tests_passed += 1
+            else:
+                print('Error while running:')
+                print('\t', ' '.join(cmd))
+                print('Expected:')
+                print('\t', '\n'.join(expected))
+                print('Got:')
+                print('\t', '\n'.join(res_lines))
+
+
+        return(tests_passed)
+
+
+if __name__ == '__main__':
+    parser = ArgumentParser('doctest-cli')
+    parser.add_argument('-f', '--file', help='input file')
+    args = parser.parse_args()
+
+    t = Tester(args.file)
+    t.test()
+
+
+
