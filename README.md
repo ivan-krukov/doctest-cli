@@ -61,4 +61,12 @@ this is fish
 
 ## Details
 
-`doctest-cli` uses `python`'s `Subprocess` module to spawn a new shell for each command and checks it against the provided output. All the environment variables are inherited from the current session.
+`doctest-cli` uses `python`'s `Subprocess` module to spawn a new shell for each command and checks it against the provided output. All the environment variables are inherited from the current session. 
+
+Whitespace (including intervening newlines) is ignored. For example, the following test should pass:
+
+```sh
+>>>echo 'hello\n\n\n\n\n\nworld'
+hello
+world
+```
