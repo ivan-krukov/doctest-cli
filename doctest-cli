@@ -50,9 +50,9 @@ class Tester():
                 else:
                     self.add_stdout(line)
 
-
     def test(self):
-        tests_passed = 0
+        passed = 0
+        failed = 0
         for i,cmd in enumerate(self.cmd):
             exp_out = self.stdout[i] if len(self.stdout[i]) > 0 else ['']
             exp_err = self.stderr[i] if len(self.stderr[i]) > 0 else ['']
@@ -63,51 +63,37 @@ class Tester():
             out = out.decode('utf-8').strip().split('\n')
             err = err.decode('utf-8').strip().split('\n')
             ret = p.returncode
-            #res_lines = [l.strip() for l in res.split('\n')]
+
             if out == exp_out and ret == exp_ret and err == exp_err:
-                tests_passed += 1
+                passed += 1
             elif ret != exp_ret:
+                failed += 1
                 print('Error while running:')
-                print('\t', cmd)
+                print('  ', cmd)
                 print('With STDERR:')
-                print('\t', '\n'.join(err))
+                print('  ', '\n'.join(err))
                 print('Expected return code:', exp_ret)
                 print('Got:', ret)
             elif err != exp_err:
+                failed += 1
                 print('Error while running:')
-                print('\t', cmd)
+                print('  ', cmd)
                 print('Expected STDERR:')
-                print('\t', '\n'.join(exp_err))
+                print('  ', '\n'.join(exp_err))
                 print('Got:')
-                print('\t', '\n'.join(err))
+                print('  ', '\n'.join(err))
             else:
+                failed += 1
                 print('Error while running:')
-                print('\t', cmd)
+                print('  ', cmd)
                 print('With STDERR:')
-                print('\t', '\n'.join(err))
+                print('  ', '\n'.join(err))
                 print('Expected STDOUT:')
-                print('\t', '\n'.join(exp_out))
+                print('  ', '\n'.join(exp_out))
                 print('Got:')
-                print('\t', '\n'.join(out))
+                print('  ', '\n'.join(out))
 
-
-        return(tests_passed)
-
-    def __str__(self):
-        s = []
-        for i, cmd in enumerate(self.cmd):
-            out = self.stdout[i]
-            err = self.stderr[i]
-            ret = self.returncode[i]
-            s.append('TEST:')
-            s.append(cmd)
-            s.append('$?={}'.format(ret))
-            s.append('STDOUT')
-            s.append('\n'.join(out))
-            s.append('STDERR')
-            s.append('\n'.join(err))
-
-        return '\n'.join(s)
+        return (passed, failed)
 
 if __name__ == '__main__':
     parser = ArgumentParser('doctest-cli')
@@ -115,4 +101,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     t = Tester(args.file)
-    t.test()
+    passed, failed = t.test()
+    print('\nTests passed: {}\nTests failed: {}'.format(passed, failed))
