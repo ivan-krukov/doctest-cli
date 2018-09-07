@@ -1,6 +1,6 @@
 # doctest-cli
 
-This is a simple utility for command-line testing.
+Doctests for your shell.
 Run an executable, check the output.
 
 ## Usage
@@ -59,7 +59,6 @@ hello
 this is fish
 ```
 
-
 ## Details
 
-`doctest-cli` uses `python`'s `Subprocess` module to spawn a shell for each command and checks it against the provided output. 
+`doctest-cli` uses `python`'s `Subprocess` module to spawn a new shell for each command and checks it against the provided output. All the environment variables are inherited from the current session.

@@ -58,6 +58,14 @@ class Tester():
                 else:
                     self.add_stdout(line)
 
+    def run(self, cmd):
+        p = sp.Popen(cmd, shell=True, executable=self.executable, stdout=sp.PIPE, stderr=sp.PIPE)
+        outb, errb = p.communicate()
+        out = outb.decode('utf-8').strip().split('\n')
+        err = errb.decode('utf-8').strip().split('\n')
+        ret = p.returncode
+        return (out, err, ret)
+
     def test(self, verbose=False, stop_on_fail=False):
         passed = 0
         failed = 0
@@ -68,11 +76,7 @@ class Tester():
             exp_err = self.stderr[i] if len(self.stderr[i]) > 0 else ['']
             exp_ret = self.returncode[i]
 
-            p = sp.Popen(cmd, shell=True, executable=self.executable, stdout=sp.PIPE, stderr=sp.PIPE)
-            out, err = p.communicate()
-            out = out.decode('utf-8').strip().split('\n')
-            err = err.decode('utf-8').strip().split('\n')
-            ret = p.returncode
+            out, err, ret = self.run(cmd)
 
             if out == exp_out and ret == exp_ret and err == exp_err:
                 passed += 1
