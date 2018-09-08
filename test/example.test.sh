@@ -28,9 +28,11 @@ world
 >>> echo 'hello' > tmp.txt && wc -l tmp.txt && rm tmp.txt
 1 tmp.txt
 
-# Test fail unknown - this fails
->>> take 3
-3
+# Unkown command returns 217
+# We dump STDERR to /dev/null
+# The exact error message if different for different systems
+>>> take 3 2> /dev/null
+$?=127
 
 # Test stderr
 >>> echo hello > /dev/stderr

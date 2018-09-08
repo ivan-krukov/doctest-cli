@@ -67,12 +67,14 @@ With STDOUT:
 With RETURN:
  0
 ------------------------------------------------------------
-Error while running:
-  take 3
+Test passed:
+  take 3 2> /dev/null
 With STDERR:
-  /bin/sh: take: command not found
-Expected RETURN: 0
-Got: 127
+ 
+With STDOUT:
+ 
+With RETURN:
+ 127
 ------------------------------------------------------------
 Test passed:
   echo hello > /dev/stderr
@@ -84,6 +86,6 @@ With RETURN:
  0
 ------------------------------------------------------------
 Tests ran: 9
-Tests passed: 7
-Tests failed: 2
+Tests passed: 8
+Tests failed: 1
 $?=1
