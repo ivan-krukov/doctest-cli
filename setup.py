@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='doctest-cli',
-    version='0.0.2',
+    version='0.0.3',
     author='Ivan Krukov',
     author_email='ivan.o.kryukov@gmail.com',
     description='Doctests for your shell',
