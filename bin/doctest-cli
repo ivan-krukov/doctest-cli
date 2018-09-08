@@ -119,5 +119,7 @@ if __name__ == '__main__':
     passed, failed = t.test(args.verbose, args.stop_on_fail)
     if failed is 0:
         print('All {} tests passed'.format(passed))
+        sys.exit(0)
     else:
         print('Tests ran: {}\nTests passed: {}\nTests failed: {}'.format(passed+failed, passed, failed))
+        sys.exit(1)

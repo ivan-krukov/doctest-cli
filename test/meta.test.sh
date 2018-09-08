@@ -86,3 +86,4 @@ With RETURN:
 Tests ran: 9
 Tests passed: 7
 Tests failed: 2
+$?=1
