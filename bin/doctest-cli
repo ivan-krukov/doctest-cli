@@ -44,7 +44,7 @@ class Tester():
 
                 if line.startswith(shebang_prefix):
                     self.executable = line.strip(shebang_prefix)
-                elif line.startswith(comment_prefix) or len(line) is 0:
+                elif line.startswith(comment_prefix) or len(line) == 0:
                     continue
                 elif line.startswith(cmd_prefix):
                     cmd = line.strip(cmd_prefix).strip()
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
     t = Tester(args.file)
     passed, failed = t.test(args.verbose, args.stop_on_fail)
-    if failed is 0:
+    if failed == 0:
         print('All {} tests passed'.format(passed))
         sys.exit(0)
     else:
